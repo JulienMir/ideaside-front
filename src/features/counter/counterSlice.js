@@ -1,5 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import {
+  LcdClient,
+  setupAuthExtension,
+  setupBankExtension,
+  setupDistributionExtension,
+  setupGovExtension,
+  setupMintExtension,
+  setupSlashingExtension,
+  setupStakingExtension,
+  setupSupplyExtension,
+} from "@cosmjs/launchpad";
+
+import { apiUrl } from '../../constants'
+
+const client = LcdClient.withExtensions(
+  { apiUrl },
+  setupAuthExtension,
+  setupBankExtension,
+  setupDistributionExtension,
+  setupGovExtension,
+  setupMintExtension,
+  setupSlashingExtension,
+  setupStakingExtension,
+  setupSupplyExtension,
+);
+
+const example = async () => {
+  //const balances = await client.bank.balances(myAddress);
+  const distParameters = await client.distribution.parameters();
+  const proposals = await client.gov.proposals();
+  const inflation = await client.mint.inflation();
+  const signingInfos = await client.slashing.signingInfos();
+  const redelegations = await client.staking.redelegations();
+  const supply = await client.supply.totalAll();
+}
+
 export const counterSlice = createSlice({
   name: 'counter',
   initialState: {
