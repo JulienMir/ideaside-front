@@ -1,14 +1,12 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { connect } from 'react-redux'
 import {
-  trySignIn,
+  signIn,
   signOut,
-  selectAddress,
   generateMnemonic,
-  selectMnemonic
 } from './authSlice';
 import { IoIosColorWand } from 'react-icons/io'
+
 import styles from './Auth.module.css';
 
 class Auth extends React.Component{
@@ -17,8 +15,17 @@ class Auth extends React.Component{
 
     this.state = {
       mnemonic: "",
-      dropdown: false
+      dropdown: true
     }
+
+    props.signIn()
+  }
+
+  toggleMnemonic = () => {
+    if (!this.state.dropdown) {
+      this.props.signOut()
+    }
+    this.setState({ dropdown: this.state.dropdown === false})
   }
 
   updateInput = (event) => {
@@ -26,81 +33,84 @@ class Auth extends React.Component{
   }
 
   handleSignIn = (event) => {
-    if (this.state.mnemonic) {
-      this.props.trySignIn(this.state.mnemonic)
+    const mnemonic = this.state.mnemonic || this.props.auth.mnemonic
+    if (mnemonic) {
+      this.props.signIn(mnemonic)
     }
   }
 
   handleGenerateMnemonic = () => {
     this.props.generateMnemonic()
-    this.setState({ mnemonic: this.props.auth.mnemonic })
   }
 
   render() {
-    const { mnemonicProps, address } = this.props.auth
-    const mnemonic = this.state.mnemonic || mnemonicProps
+    const { mnemonic, address } = this.props.auth
+    const localMnemonic = this.state.mnemonic || mnemonic
     const mnemonicIsValid = address !== ""
-    const { dropdown } = this.state
+    const dropdown = !address && this.state.dropdown
 
     return (
-      <div>
+      <div className={styles.signIn}>
         <div className={styles.row}>
-          <input className={styles.value} value={address} disabled={true} />
-          <button
-            className={styles.button}
-            aria-label="Decrement value"
+          <div className={styles.flex10}>
+            <div className={styles.address_bar}>
+              {address}
+            </div>
+          </div>
+          <div className={styles.flex2}>
+            <button
+              className={styles.button}
+              aria-label="Decrement value"
 
-            onClick={() => { this.setState(Object.assign(this.state, { dropdown: !this.state.dropdown })) }}
-          >
-            {address ? (
-              "Sign out"
-            ) : (
-              "Sign In"
-            )}
-          </button>
-        </div>
-        <div className="row">
-          <div className={styles.container_dropdown}>
-            { dropdown && !address &&
-              <div className={styles.dropdown}>
-                <div className={styles.dropdown_textarea}>
-                  <textarea
-                    value={mnemonic}
-                    placeholder={mnemonic || "Mnemonic..."}
-                    onChange={this.updateInput}
-                    className={styles.dropdown_input}
-                  ></textarea>
-                  <div
-                    onClick={this.handleGenerateMnemonic}
-                  >
-                    <IoIosColorWand className={styles.wand} />
-                  </div>
-                </div>
-                <div
-                  className={mnemonicIsValid ? styles.button : styles.disabled_button}
-                  disabled={mnemonicIsValid !== true}
-                  onClick={this.handleSignIn}
-                >
-                  <div className="dropdown__button__text">
-                    Import mnemonic
-                  </div>
-                </div>
-              </div>
-            }
+              onClick={this.toggleMnemonic}
+            >
+              {address ? (
+                "Sign out"
+              ) : (
+                "Sign In"
+              )}
+            </button>
           </div>
         </div>
+        { dropdown &&
+        <div className={styles.dropdown}>
+          <div className={styles.dropdown_textarea}>
+            <textarea
+              value={localMnemonic}
+              placeholder={localMnemonic || "Mnemonic..."}
+              onChange={this.updateInput}
+              className={styles.dropdown_input}
+            ></textarea>
+            <div
+              onClick={this.handleGenerateMnemonic}
+            >
+              <IoIosColorWand className={styles.wand} />
+            </div>
+          </div>
+          <div
+            className={mnemonicIsValid ? styles.button : styles.disabled_button}
+            disabled={mnemonicIsValid !== true}
+            onClick={this.handleSignIn}
+          >
+            <div className="dropdown__button__text">
+              Import mnemonic
+            </div>
+          </div>
+        </div>
+        }
       </div>
     )
   }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state, props) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    ...props
   }
 }
 
-const mapDispatchToProps = { trySignIn, signOut, generateMnemonic }
+const mapDispatchToProps = { signIn, signOut, generateMnemonic }
 
 export default connect(
   mapStateToProps,

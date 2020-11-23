@@ -1,15 +1,20 @@
-.signIn {
-  display: flex;
-  flex-direction: column;
-  align-self: right;
+.bank {
   width: 80%;
-  min-width: 60px;
+  align-self: right;
+  border: 1px solid lightgray;
+  border-radius: 5px; 
 }
+
 
 .row {
   display: flex;
+  justify-content: center;
   width: 100%;
-  height: 50px;
+  align-items: center;
+}
+
+.row:not(:last-child) {
+  margin-bottom: 16px;
 }
 
 .value {
@@ -25,10 +30,16 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+.title {
+  margin-right: 10px;
+}
+
 .button {
   appearance: none;
   background: none;
-  font-size: 24px;
+  font-size: 32px;
+  padding-left: 12px;
+  padding-right: 12px;
   outline: none;
   border: 2px solid transparent;
   color: rgb(112, 76, 182);
@@ -37,10 +48,7 @@
   background-color: rgba(112, 76, 182, 0.1);
   border-radius: 2px;
   transition: all 0.15s;
-  margin: 0 auto;
-  width: 100%;
-  padding-left: 12px;
-  padding-right: 12px;
+  margin: auto;
 }
 
 .disabled_button {
@@ -59,16 +67,8 @@
   transition: all 0.15s;
 }
 
-button > svg {
-  position: relative;
-  top: 5px;
-  bottom: 10px;
-}
-
 .address_bar {
-  background-color: rgba(112, 76, 182, 0.05);
-  color: rgb(47, 32, 77);
-  width: 100%;
+  background-color: lightblue;
 }
 .flex10 {
   display: flex;
@@ -77,7 +77,7 @@ button > svg {
 
 .flex2 {
   display: flex;
-  flex: 2 3;
+  flex: 3 4;
 }
 
 .textbox {
@@ -88,16 +88,12 @@ button > svg {
   margin-right: 8px;
 }
 
-.dropdown {
-  position: relative;
-  top: 100%;
-  border: 1px solid lightgray;
+.container_dropdown {
   border-radius: 5px;
   background-color: white;
+  border-color: violet;
   border-width: 2px;
-  padding: 5px;
-  height: 100%;
-  max-width: 300px;
+  padding: 5px
 }
 
 .dropdown_input {

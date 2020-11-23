@@ -1,14 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
 import Auth from './features/auth/Auth';
+import Bank from './features/bank/Bank';
+import Staking from './features/staking/Staking';
+import Name from './features/name/Name';
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <Auth />
+        <Bank />
+        <Staking />
+        <Name />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
